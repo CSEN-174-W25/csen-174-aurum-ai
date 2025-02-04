@@ -5,7 +5,7 @@ const Dashboard = () => {
         <div>
             {/* Header Section */}
             <header>
-                <h1>Financial Dashboard</h1>
+                <h1>My Dashboard</h1>
                 <div>
                     <p>Welcome back, [User Name]</p>
                     <p>Last updated: [Date]</p>
