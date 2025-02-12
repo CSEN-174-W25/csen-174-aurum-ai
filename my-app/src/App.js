@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import ChatInterface from './components/SampleChatInterface';
+
 function App() {
   const [time, setTime] = useState(0);
 
@@ -11,6 +13,7 @@ function App() {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
 
   return (
     <div className="App">
@@ -28,6 +31,10 @@ function App() {
           Learn React
         </a>
         <p>The current time is {time}</p>
+
+        {/* Display chat interface */}
+        <ChatInterface />
+
       </header>
     </div>
   );
