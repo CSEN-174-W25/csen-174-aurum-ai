@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import ChatInterface from './components/SampleChatInterface';
+import Chat from './components/Chat';
 
 function App() {
   const [time, setTime] = useState(0);
@@ -31,10 +32,10 @@ function App() {
           Learn React
         </a>
         <p>The current time is {time}</p>
-
+        
         {/* Display chat interface */}
         <ChatInterface />
-
+        <Chat />  {/* Add Chat Component Here */}
       </header>
     </div>
   );
