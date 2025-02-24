@@ -1,5 +1,5 @@
 import React from 'react';
-import ChatInterface from '../components/SampleChatInterface';
+import ChatInterface from '../components/chatInterface';
 
 const Chat = () => {
     return (
