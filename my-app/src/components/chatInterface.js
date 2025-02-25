@@ -1,7 +1,6 @@
 import React from "react";
 import axios from 'axios';
 
-
 class ChatInterface extends React.Component {
     constructor(props){
         super(props);
@@ -65,8 +64,8 @@ class ChatInterface extends React.Component {
 
     render() {
         return <>
-            <h3>Ask Anything to AurumAI</h3>
-            <form>
+            <h3 className="text-3xl text-red-500">Ask Anything to AurumAI</h3>
+            <form className="text-center">
                 <input 
                 type="text"  
                 value={this.state.prompt}
