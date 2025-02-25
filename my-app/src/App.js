@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard";
 import Advice from "./pages/Advice";
 import Information from "./pages/Information";
 
+import Navbar from "./components/navbar";
+
 function App() {
   return (
 <<<<<<< HEAD
@@ -21,6 +23,7 @@ function App() {
 =======
     <>
       <Router>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/chat" element={<Chat />} />
