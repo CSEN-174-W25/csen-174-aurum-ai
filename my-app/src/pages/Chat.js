@@ -6,6 +6,9 @@ const Chat = () => {
         <>
             <h1>Chat</h1>
             <ChatInterface />
+            <div>
+                This should have a red background with white text and padding
+            </div>
         </>
     );
 };
