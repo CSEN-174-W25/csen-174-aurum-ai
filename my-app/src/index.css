@@ -1,4 +1,40 @@
+/* Import Google Fonts (Example: Poppins & Roboto) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;700&display=swap');
+
 body {
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: var(--primary-font);
+    background-color: var(--background-color);
+    color: var(--text-color);
     margin: 0;
+    padding: 0;
 }
+
+:root {
+    /* 🎨 Color Palette */
+    --primary-color: #2c3e50;
+    --secondary-color: #1abc9c;
+    --background-color: #ecf0f1;
+    --text-color: #333;
+    --button-color: #3498db;
+    --button-hover: #2980b9;
+  
+    /* 🌟 Font Styles */
+    --primary-font: 'Poppins', sans-serif;
+    --secondary-font: 'Roboto', sans-serif;
+  }
+
+button {
+    background-color: var(--button-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: var(--primary-font);
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: var(--button-hover);
+  }
+  
