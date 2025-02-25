@@ -9,6 +9,7 @@ import Information from "./pages/Information";
 
 function App() {
   return (
+<<<<<<< HEAD
     <Router>
       <Routes>
         <Route path="/" element={<Dashboard />} />
@@ -17,6 +18,17 @@ function App() {
         <Route path="/information" element={<Information />} />
       </Routes>
     </Router>
+=======
+    <>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/advice" element={<Advice />} />
+        </Routes>
+      </Router>
+    </>
+>>>>>>> dda8c18b (add Navbar component)
   );
 }
 

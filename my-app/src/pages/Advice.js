@@ -1,5 +1,8 @@
 import React from 'react';
 
+// Navbar
+import Navbar from '../components/navbar';
+
 const AdvicePage = () => {
     // Sample article data
     const articles = [
@@ -28,6 +31,7 @@ const AdvicePage = () => {
 
     return (
         <>
+            <Navbar />
             <div className="container">
                 <div className="header">
                     <h1>Financial Advice & Tips</h1>
