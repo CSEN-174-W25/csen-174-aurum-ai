@@ -1,5 +1,6 @@
 import React from 'react';
 import ChatInterface from '../components/chatInterface';
+import './styles/Chat.css';
 
 const Chat = () => {
     return (
