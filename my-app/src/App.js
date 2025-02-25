@@ -11,8 +11,8 @@ import Navbar from "./components/navbar";
 
 function App() {
   return (
-<<<<<<< HEAD
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
@@ -20,18 +20,6 @@ function App() {
         <Route path="/information" element={<Information />} />
       </Routes>
     </Router>
-=======
-    <>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/advice" element={<Advice />} />
-        </Routes>
-      </Router>
-    </>
->>>>>>> dda8c18b (add Navbar component)
   );
 }
 

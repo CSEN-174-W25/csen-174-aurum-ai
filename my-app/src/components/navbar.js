@@ -22,9 +22,9 @@ const Navbar = () => {
                 {/* Dropdown Menu */}
                 <div className={`menu-dropdown ${isMenuOpen ? 'active' : ''}`}>
                     <Link to="/">Home</Link>
-                    <Link to="/dashboard">Dashboard</Link>
-                    <Link to="/analytics">Analytics</Link>
-                    <Link to="/settings">Settings</Link>
+                    <Link to="/chat">Chat</Link>
+                    <Link to="/advice">Advice Pages</Link>
+                    <Link to="/information">Information</Link>
                 </div>
             </div>
 
