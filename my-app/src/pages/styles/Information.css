@@ -1,0 +1,196 @@
+.information-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  h1 {
+    color: #333;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  h2 {
+    color: #444;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Tabs styling */
+  .tabs {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  
+  .tab {
+    padding: 0.75rem 1.5rem;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .tab:hover {
+    color: #4b5563;
+  }
+  
+  .tab.active {
+    color: #3b82f6;
+    border-bottom: 3px solid #3b82f6;
+    margin-bottom: -2px;
+  }
+  
+  /* Categories content styling */
+  .category-section {
+    margin-bottom: 2rem;
+  }
+  
+  .items-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .item-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .color-picker {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  
+  .color-picker input {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  
+  .item-inputs {
+    margin-top: 0.5rem;
+  }
+  
+  .input-group {
+    margin-bottom: 1rem;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #4b5563;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    font-size: 1rem;
+  }
+  
+  .input-group input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+  
+  /* Button styling */
+  .add-button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-button:hover {
+    background-color: #2563eb;
+  }
+  
+  .remove-button {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+    align-self: flex-end;
+  }
+  
+  .remove-button:hover {
+    background-color: #dc2626;
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .save-button {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-button:hover {
+    background-color: #059669;
+  }
+  
+  .reset-button {
+    background-color: #6b7280;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .reset-button:hover {
+    background-color: #4b5563;
+  }
+  
+  /* Investment specific styling */
+  .investment-total {
+    background-color: #f3f4f6;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    color: #4b5563;
+  }

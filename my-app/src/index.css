@@ -15,8 +15,6 @@ body {
     --secondary-color: #1abc9c;
     --background-color: #ecf0f1;
     --text-color: #333;
-    --button-color: #3498db;
-    --button-hover: #2980b9;
   
     /* 🌟 Font Styles */
     --primary-font: 'Poppins', sans-serif;
@@ -24,9 +22,10 @@ body {
   }
 
 button {
-    background-color: var(--button-color);
-    color: white;
-    border: none;
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
@@ -35,6 +34,7 @@ button {
   }
 
   button:hover {
-    background-color: var(--button-hover);
+    background-color: var(--primary-color);
+    color: var(--background-color);
   }
   

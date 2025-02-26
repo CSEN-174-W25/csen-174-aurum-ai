@@ -1,0 +1,474 @@
+/* Dashboard.css */
+
+:root {
+    /* 🎨 Color Palette */
+    --primary-color: #2c3e50;
+    --secondary-color: #1abc9c;
+    --background-color: #ecf0f1;
+    --text-color: #333;
+  
+    /* 🌟 Font Styles */
+    --primary-font: 'Poppins', sans-serif;
+    --secondary-font: 'Roboto', sans-serif;
+  }
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    line-height: 1.6;
+  }
+  
+  /* Dashboard Container */
+  .dashboard {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Navigation Styles */
+  .navigation {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    padding: 16px 24px;
+  }
+  
+  .nav-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+  
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .current-date {
+    color: #6b7280;
+    font-size: 14px;
+  }
+  
+  /* Main Container */
+  .main-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    flex: 1;
+  }
+  
+  /* Card Styles */
+  .card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  
+  /* Welcome Card */
+  .welcome-card {
+    margin-bottom: 24px;
+  }
+  
+  .welcome-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .welcome-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 4px;
+  }
+  
+  .welcome-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  .last-login {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  .icon {
+    margin-right: 6px;
+  }
+  
+  /* Section Title */
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .section-icon {
+    margin-right: 8px;
+    color: #1a56db;
+  }
+  
+  /* Financial Overview */
+  .financial-overview {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  
+  @media (min-width: 640px) {
+    .financial-overview {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .financial-overview {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  .overview-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    padding: 24px;
+  }
+  
+  .card-label {
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  
+  .card-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 8px;
+  }
+  
+  .card-trend {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+  
+  .card-trend.positive {
+    color: #10b981;
+  }
+  
+  .card-trend.negative {
+    color: #ef4444;
+  }
+  
+  .trend-icon {
+    margin-right: 4px;
+  }
+  
+  .card-note {
+    display: block;
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 8px;
+  }
+  
+  /* Dashboard Grid Layout */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  @media (min-width: 1024px) {
+    .dashboard-grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+  
+  .main-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .side-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  /* Budget Tracking */
+  .budget-items {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .budget-item {
+    margin-bottom: 12px;
+  }
+  
+  .budget-item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  
+  .budget-category {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .budget-amount {
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  /* Progress Bar */
+  .progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background-color: #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.3s ease;
+  }
+  
+  /* Financial Goals */
+  .goals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .goal-item {
+    margin-bottom: 12px;
+  }
+  
+  .goal-item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  
+  .goal-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .goal-progress {
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  .add-goal-button {
+    margin-top: 12px;
+    padding: 8px;
+    background-color: #eef2ff;
+    color: #4f46e5;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .add-goal-button:hover {
+    background-color: #e0e7ff;
+  }
+  
+  /* Donut Chart */
+  .donut-chart-container {
+    width: 128px;
+    height: 128px;
+    margin: 0 auto 16px;
+  }
+  
+  .donut-chart {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .investment-legend {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+  
+  .legend-text {
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  /* Financial Education */
+  .tip-section {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  
+  .subsection-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 8px;
+  }
+  
+  .tip-text {
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  .resource-list {
+    list-style-type: none;
+  }
+  
+  .resource-item {
+    margin-bottom: 8px;
+  }
+  
+  .resource-link {
+    font-size: 14px;
+    color: #1a56db;
+    text-decoration: none;
+  }
+  
+  .resource-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Alerts */
+  .alert-list {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .alert {
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  
+  .alert.warning {
+    background-color: #fffbeb;
+    color: #92400e;
+  }
+  
+  .alert.danger {
+    background-color: #fef2f2;
+    color: #b91c1c;
+  }
+  
+  .alert.info {
+    background-color: #eff6ff;
+    color: #1e40af;
+  }
+  
+  /* Footer */
+  .footer {
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 24px 16px;
+    margin-top: 48px;
+  }
+  
+  .footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .copyright {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 16px;
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: 16px;
+  }
+  
+  .footer-link {
+    font-size: 14px;
+    color: #6b7280;
+    text-decoration: none;
+  }
+  
+  .footer-link:hover {
+    color: #1a56db;
+  }
+  
+  @media (min-width: 768px) {
+    .footer-container {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+    
+    .copyright {
+      margin-bottom: 0;
+    }
+  }
+  
+  /* Media Queries for Responsive Design */
+  @media (max-width: 640px) {
+    .current-date {
+      display: none;
+    }
+    
+    .welcome-content {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .last-login {
+      margin-top: 8px;
+    }
+  }
