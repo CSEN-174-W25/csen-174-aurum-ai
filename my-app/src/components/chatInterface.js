@@ -1,5 +1,7 @@
 import React from "react";
 import axios from 'axios';
+import { Send } from 'lucide-react';
+import '../pages/styles/Chat.css';
 
 class ChatInterface extends React.Component {
     constructor(props){
@@ -63,30 +65,35 @@ class ChatInterface extends React.Component {
     }
 
     render() {
-        return <>
-            <h3 className="text-3xl text-red-500">Ask Anything to AurumAI</h3>
-            <form className="text-center">
-                <input 
-                type="text"  
-                value={this.state.prompt}
-                onChange={(e) => this.setState({prompt: e.target.value})} 
-                placeholder="Enter your prompt" required />
-                <input type="submit" onClick={this.fetchChatResponse} />
-            </form>
-
-            <ul className="convo">
-                {Array.isArray(this.state.context.context) ? this.state.context.context.map((cntx, idx) => {
-                    const role = cntx['role'];
-                    const dialogue = cntx['content'];
-
-                    if(role==='user')
-                        return <li className="dialogues" key={idx}>User: {dialogue} <br /></li>
-                    else if(role==='assistant')
-                        return <li className="dialogues" key={idx}>AurumAI: {dialogue} <br /></li>
-                    return<></>;
-                }) : <></>}
-            </ul>
-        </>
+        return (
+            <>
+                <div className="convo-wrapper">
+                    <h3>Ask Anything to AurumAI</h3>
+                    <ul className="convo">
+                        {Array.isArray(this.state.context.context) ? this.state.context.context.map((cntx, idx) => {
+                            const role = cntx['role'];
+                            const dialogue = cntx['content'];
+                            if(role==='user')
+                                return <li className="dialogues" key={idx}><strong>You:</strong> {dialogue}</li>
+                            else if(role==='assistant')
+                                return <li className="dialogues" key={idx}><strong>AurumAI:</strong> {dialogue}</li>
+                            return null;
+                        }) : null}
+                    </ul>
+                </div>
+                <form className="chat-form" onSubmit={this.fetchChatResponse}>
+                    <input 
+                        className="chat-input"
+                        type="text"  
+                        value={this.state.prompt}
+                        onChange={(e) => this.setState({prompt: e.target.value})} 
+                        placeholder="Type your message..." 
+                        required 
+                    />
+                    <button type="submit" className="submit-button"><Send /></button>
+                </form>
+            </>
+        )
     }
 }
 
