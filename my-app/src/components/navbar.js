@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { UserRound } from 'lucide-react';
 import './styles/navbar.css';
 
 const Navbar = () => {
@@ -31,14 +32,14 @@ const Navbar = () => {
             {/* Logo */}
             <div className="navbar-center">
                 <Link to="/" className="logo">
-                    LOGO
+                    AurumAI
                 </Link>
             </div>
 
             {/* Profile Link */}
             <div className="navbar-right">
                 <Link to="/profile" className="profile-link">
-                    My Profile
+                    <UserRound />
                 </Link>
             </div>
         </nav>

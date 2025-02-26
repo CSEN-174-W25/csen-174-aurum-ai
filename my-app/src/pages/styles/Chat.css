@@ -1,7 +1,7 @@
 .chat-container {
-    max-width: 70%;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 24px 16px;
 }
 
 .chat-header h1 {
@@ -16,10 +16,16 @@
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 2rem;
-    min-height: 85vh;
+    max-height: 75vh;
     display: flex;
     flex-direction: column;
     position: relative;
+    gap: 2rem;
+}
+
+.convo-wrapper {
+    min-height: 70vh;
+    overflow: scroll;
 }
 
 .convo {
@@ -35,7 +41,6 @@
     margin-bottom: 1rem;
     padding: 0.8rem;
     border-radius: 8px;
-    background-color: #f8f9fa;
 }
 
 .dialogues:nth-child(odd) {
@@ -45,7 +50,7 @@
 .chat-form {
     font-family: var(--primary-font);
     position: sticky;
-    bottom: 0;
+    bottom: 20px;
     left: 0;
     right: 0;
     display: flex;
@@ -54,9 +59,12 @@
     background-color: white;
     border-top: 1px solid #e9ecef;
     margin: 0 -2rem -2rem -2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .chat-input {
+    font-family: var(--primary-font);
     flex-grow: 1;
     background-color: #f8f9fa;
     border-radius: 8px;
@@ -72,6 +80,9 @@
     padding: 0.75rem 1.5rem;
     border: none;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transition: background-color 0.2s;
 }
 

@@ -73,11 +73,16 @@
 
 /* Profile link styling */
 .profile-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #333;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    border-radius: 50%;
+    height: 56px;
+    width: 56px;
     transition: background-color 0.3s ease;
+    border: 1.5px solid var(--primary-color);
 }
 
 .profile-link:hover {

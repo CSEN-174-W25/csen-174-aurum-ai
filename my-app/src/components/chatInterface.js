@@ -1,5 +1,6 @@
 import React from "react";
 import axios from 'axios';
+import { Send } from 'lucide-react';
 import '../pages/styles/Chat.css';
 
 class ChatInterface extends React.Component {
@@ -66,19 +67,20 @@ class ChatInterface extends React.Component {
     render() {
         return (
             <>
-                <h3>Ask Anything to AurumAI</h3>
-                <ul className="convo">
-                    {Array.isArray(this.state.context.context) ? this.state.context.context.map((cntx, idx) => {
-                        const role = cntx['role'];
-                        const dialogue = cntx['content'];
-
-                        if(role==='user')
-                            return <li className="dialogues" key={idx}><strong>You:</strong> {dialogue}</li>
-                        else if(role==='assistant')
-                            return <li className="dialogues" key={idx}><strong>AurumAI:</strong> {dialogue}</li>
-                        return null;
-                    }) : null}
-                </ul>
+                <div className="convo-wrapper">
+                    <h3>Ask Anything to AurumAI</h3>
+                    <ul className="convo">
+                        {Array.isArray(this.state.context.context) ? this.state.context.context.map((cntx, idx) => {
+                            const role = cntx['role'];
+                            const dialogue = cntx['content'];
+                            if(role==='user')
+                                return <li className="dialogues" key={idx}><strong>You:</strong> {dialogue}</li>
+                            else if(role==='assistant')
+                                return <li className="dialogues" key={idx}><strong>AurumAI:</strong> {dialogue}</li>
+                            return null;
+                        }) : null}
+                    </ul>
+                </div>
                 <form className="chat-form" onSubmit={this.fetchChatResponse}>
                     <input 
                         className="chat-input"
@@ -88,7 +90,7 @@ class ChatInterface extends React.Component {
                         placeholder="Type your message..." 
                         required 
                     />
-                    <button type="submit" className="submit-button">Send</button>
+                    <button type="submit" className="submit-button"><Send /></button>
                 </form>
             </>
         )
