@@ -4,10 +4,11 @@ import './styles/Chat.css';
 
 const Chat = () => {
     return (
-        <>
-            <h1>Chat</h1>
-            <ChatInterface />
-        </>
+        <div className="chat-container">
+            <div className="chat-interface-wrapper">
+                <ChatInterface />
+            </div>
+        </div>
     );
 };
 
