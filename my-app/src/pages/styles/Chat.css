@@ -100,3 +100,27 @@ h3 {
     color: #2c3e50;
     font-size: 1.5rem;
 }
+
+.loading {
+    background-color: #f8f9fa !important;
+}
+
+.loading-dots {
+    display: inline-block;
+    animation: loading 1.4s infinite both;
+}
+
+@keyframes loading {
+    0% {
+        content: "Thinking";
+    }
+    25% {
+        content: "Thinking.";
+    }
+    50% {
+        content: "Thinking..";
+    }
+    75% {
+        content: "Thinking...";
+    }
+}

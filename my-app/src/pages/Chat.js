@@ -7,7 +7,6 @@ const Chat = () => {
         <div className="chat-container">
             <div className="chat-interface-wrapper">
                 <ChatInterface />
-                <div>Hello World</div>
             </div>
         </div>
     );

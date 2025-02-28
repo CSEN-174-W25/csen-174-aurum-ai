@@ -11,6 +11,7 @@ class ChatInterface extends React.Component {
                 {'system': ''},
             ],
             prompt: "",
+            isLoading: false
         }
     }
 
@@ -39,15 +40,21 @@ class ChatInterface extends React.Component {
         let objContext = {...this.state.context};
         let context = objContext.context;
         
+        this.setState({ isLoading: true });
+        
         axios.post('http://localhost:5001/', {
             prompt: prompt,
             context: context,
         }).then((response) =>{
             this.setState({
                 context: response?.data,
-                prompt: ""
+                prompt: "",
+                isLoading: false
             })
-        }).catch(error => console.log(error));
+        }).catch(error => {
+            console.log(error);
+            this.setState({ isLoading: false });
+        });
     }
 
     componentDidMount() {
@@ -79,6 +86,11 @@ class ChatInterface extends React.Component {
                                 return <li className="dialogues" key={idx}><strong>AurumAI:</strong> {dialogue}</li>
                             return null;
                         }) : null}
+                        {this.state.isLoading && (
+                            <li className="dialogues loading">
+                                <strong>AurumAI:</strong> <span className="loading-dots">Thinking...</span>
+                            </li>
+                        )}
                     </ul>
                 </div>
                 <form className="chat-form" onSubmit={this.fetchChatResponse}>
