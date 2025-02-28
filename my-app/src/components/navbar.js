@@ -10,11 +10,15 @@ const Navbar = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const handleLinkClick = () => {
+        setIsMenuOpen(false);
+    };
+
     return (
         <nav className="navbar">
             {/* Hamburger Menu */}
             <div className="navbar-left">
-                <button className="hamburger" onClick={toggleMenu}>
+                <button className={`hamburger ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>
                     <span></span>
                     <span></span>
                     <span></span>
@@ -22,10 +26,10 @@ const Navbar = () => {
                 
                 {/* Dropdown Menu */}
                 <div className={`menu-dropdown ${isMenuOpen ? 'active' : ''}`}>
-                    <Link to="/">Home</Link>
-                    <Link to="/chat">Chat</Link>
-                    <Link to="/advice">Advice Pages</Link>
-                    <Link to="/information">Information</Link>
+                    <Link to="/" onClick={handleLinkClick}>Home</Link>
+                    <Link to="/chat" onClick={handleLinkClick}>Chat</Link>
+                    <Link to="/advice" onClick={handleLinkClick}>Advice Pages</Link>
+                    <Link to="/information" onClick={handleLinkClick}>Information</Link>
                 </div>
             </div>
 
