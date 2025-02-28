@@ -88,7 +88,7 @@ class ChatInterface extends React.Component {
                         }) : null}
                         {this.state.isLoading && (
                             <li className="dialogues loading">
-                                <strong>AurumAI:</strong> <span className="loading-dots">Thinking...</span>
+                                <strong>AurumAI:</strong> <span className="loading-dots">Thinking</span>
                             </li>
                         )}
                     </ul>
