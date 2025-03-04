@@ -1,68 +1,73 @@
 import React from "react";
-import axios from 'axios';
-import { Send } from 'lucide-react';
-import '../pages/styles/Chat.css';
+import axios from "axios";
+import { Send, Trash2 } from "lucide-react"; // ✅ Import Trash icon
+import "../pages/styles/Chat.css";
 
 class ChatInterface extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            context: [
-                {'system': ''},
-            ],
+            context: JSON.parse(localStorage.getItem("chatHistory")) || [], // ✅ Load from localStorage
             prompt: "",
-        }
+        };
+        this.messagesEndRef = React.createRef(); // ✅ Ref for auto-scrolling
     }
 
-    fetchContext = (context) => {
-        this.setState({
-            context: context,
-        });
+    /* ✅ Scroll to bottom whenever a new message is added */
+    scrollToBottom = () => {
+        if (this.messagesEndRef.current) {
+            this.messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
+    componentDidUpdate() {
+        this.scrollToBottom();
     }
 
-    updateContext = (prompt, agent) => {
-        let context = [...this.state.context];
-        if(agent === 'user'){
-            context.push({'user': prompt});
-        } else {
-            context.push({'assistant': prompt});
-        }
+    /* ✅ Function to clear chat history */
+    clearChat = () => {
+        this.setState({ context: [] });
+        localStorage.removeItem("chatHistory");
+    };
 
-        this.setState({
-            context: context
-        })
-    } 
-
-    fetchChatResponse = (event) => {
+    fetchChatResponse = async (event) => {
         event.preventDefault();
-        const prompt = this.state.prompt;
-        let objContext = {...this.state.context};
-        let context = objContext.context;
-        
-        axios.post('http://localhost:5001/', {
-            prompt: prompt,
-            context: context,
-        }).then((response) =>{
-            this.setState({
-                context: response?.data,
-                prompt: ""
-            })
-        }).catch(error => console.log(error));
-    }
+        const { prompt } = this.state;
+        let context = Array.isArray(this.state.context) ? [...this.state.context] : [];
+        const { userData } = this.props;
 
-    componentDidMount() {
-        axios.get('http://localhost:5001/', {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            withCredentials: true,
-            mode: 'cors',
-        }).then(response => {
-            this.fetchContext(response.data);
-            }).catch(error => {
-            console.log(error)
-        })
-    }
+        if (!prompt.trim()) return;
+
+        // ✅ Append user message and save history
+        const updatedContext = [...context, { role: "user", content: prompt }];
+        this.setState({ context: updatedContext, prompt: "" });
+        localStorage.setItem("chatHistory", JSON.stringify(updatedContext)); // Save chat history
+
+        try {
+            const response = await axios.post("http://localhost:5001/", {
+                prompt,
+                context: updatedContext,
+                userData,
+            });
+
+            if (response.data && Array.isArray(response.data.context)) {
+                // ✅ Find latest assistant response
+                const lastAssistantMessage = response.data.context.find(msg => msg.role === "assistant");
+                if (lastAssistantMessage) {
+                    const finalContext = [...updatedContext, lastAssistantMessage];
+                    this.setState({ context: finalContext });
+
+                    // ✅ Save updated chat history
+                    localStorage.setItem("chatHistory", JSON.stringify(finalContext));
+                }
+            } else {
+                console.error("Invalid API response format:", response.data);
+            }
+
+        } catch (error) {
+            console.error("🚨 Error fetching response:", error);
+        }
+    };
 
     render() {
         return (
@@ -70,30 +75,44 @@ class ChatInterface extends React.Component {
                 <div className="convo-wrapper">
                     <h3>Ask Anything to AurumAI</h3>
                     <ul className="convo">
-                        {Array.isArray(this.state.context.context) ? this.state.context.context.map((cntx, idx) => {
-                            const role = cntx['role'];
-                            const dialogue = cntx['content'];
-                            if(role==='user')
-                                return <li className="dialogues" key={idx}><strong>You:</strong> {dialogue}</li>
-                            else if(role==='assistant')
-                                return <li className="dialogues" key={idx}><strong>AurumAI:</strong> {dialogue}</li>
-                            return null;
-                        }) : null}
+                        {Array.isArray(this.state.context) ? (
+                            this.state.context
+                                .filter(cntx => cntx.role !== "system")
+                                .map((cntx, idx) => (
+                                    <li className="dialogues" key={idx}>
+                                        <strong>{cntx.role === "user" ? "You" : "AurumAI"}:</strong> {cntx.content}
+                                    </li>
+                                ))
+                        ) : (
+                            <li className="dialogues">No conversation history available.</li>
+                        )}
+                        <div ref={this.messagesEndRef} /> {/* ✅ Auto-scroll anchor */}
                     </ul>
                 </div>
+
+                {/* ✅ Chat Input and Buttons */}
                 <form className="chat-form" onSubmit={this.fetchChatResponse}>
-                    <input 
+                    <input
                         className="chat-input"
-                        type="text"  
+                        type="text"
                         value={this.state.prompt}
-                        onChange={(e) => this.setState({prompt: e.target.value})} 
-                        placeholder="Type your message..." 
-                        required 
+                        onChange={(e) => this.setState({ prompt: e.target.value })}
+                        placeholder="Type your message..."
+                        required
                     />
-                    <button type="submit" className="submit-button"><Send /></button>
+                    
+                    {/* ✅ Clear Chat Button */}
+                    <button type="button" className="clear-button" onClick={this.clearChat}>
+                        <Trash2 />
+                    </button>
+
+                    {/* ✅ Send Message Button */}
+                    <button type="submit" className="submit-button">
+                        <Send />
+                    </button>
                 </form>
             </>
-        )
+        );
     }
 }
 

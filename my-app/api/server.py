@@ -9,15 +9,16 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_cred
 api = Api(app)
 
 
-system_context = '''
-    You are a helpful financial assistant. I may ask you questions about beudgeting, saving, investing, or other financial topics.
-    Do your best to provide helpful financial advice.
+base_system_context = '''
+    You are a helpful financial assistant. You assist users with budgeting, saving, investing, and other financial topics.
+    Use the provided financial information to tailor responses to the user's specific situation. Keep in mind that the text will
+    be displayed in a chat interface, so keep responses concise and do not use **bold** or other formatting that is not supported in plain text.
 '''
 
 class ChatHandler(Resource):
     def __init__(self, **kwargs):
         self.context = [{"role": "system",
-                        "content": system_context}]
+                        "content": base_system_context}]
 
     def get(self):
         response = jsonify(context=self.context)
@@ -32,7 +33,39 @@ class ChatHandler(Resource):
     def post(self):
         rqs = request.json
         prompt = rqs.get('prompt')
-        context = rqs.get('context')
+        user_data = rqs.get('userData', {})
+
+        user_context = f"""
+        The user is {user_data.get('name', 'Unknown')} and last logged in on {user_data.get('lastLogin', 'Unknown')}.
+        Today is {user_data.get('currentDate', 'Unknown')}.
+
+        Their financial summary:
+        - **Income:** ${user_data.get('income', 0)}
+        - **Expenses:** ${user_data.get('expenses', 0)}
+        - **Savings:** ${user_data.get('savings', 0)}
+        - **Investment Allocation:**
+          - Stocks: {user_data.get('investments', {}).get('Stocks', 0)}%
+          - Bonds: {user_data.get('investments', {}).get('Bonds', 0)}%
+          - Real Estate: {user_data.get('investments', {}).get('Real Estate', 0)}%
+          - Cash: {user_data.get('investments', {}).get('Cash', 0)}%
+
+        - **Budget Progress:**
+        """ + '\n'.join([
+            f"  - {cat['name']}: Spent ${cat['spent']} out of ${cat['budget']}" 
+            for cat in user_data.get('budgetCategories', [])
+        ]) + """
+        
+        - **Financial Goals:**
+        """ + '\n'.join([
+            f"  - {goal['name']}: ${goal['current']} saved out of ${goal['target']}"
+            for goal in user_data.get('goals', [])
+        ]) + """
+
+        Use this information to personalize your financial advice.
+        """
+
+        context = [{"role": "system", "content": base_system_context + user_context}]
+        context.append({"role": "user", "content": prompt})
 
         response_data = collect_messages(prompt, context)
         response = jsonify(response_data)
