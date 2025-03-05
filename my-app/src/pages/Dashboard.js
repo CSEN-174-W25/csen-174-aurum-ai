@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { Clock, DollarSign, CreditCard, TrendingUp, Target, BookOpen, Bell, Settings } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { runSignOut } from '../firebase/auth';
+import { useAuth } from '../contexts/authContext';
+
 import './styles/Dashboard.css';
 import Information from './Information'; // Import the Information component
 
 const Dashboard = () => {
+    const navigate = useNavigate()
+    const { userLoggedIn } = useAuth()
+
     // Sample data - you would replace with real data
     const [user, setUser] = useState({
         name: "Riley Heike",
@@ -117,9 +124,7 @@ const Dashboard = () => {
                             <Settings size={18} />
                             {showInformation ? "Dashboard" : "Edit Data"}
                         </button>
-                        <button className="account-button">
-                            Account
-                        </button>
+                        <button onClick={() => { runSignOut().then(() => { navigate('/') }) }}>Logout</button>
                     </div>
                 </div>
             </nav>

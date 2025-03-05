@@ -10,7 +10,7 @@ api = Api(app)
 
 
 system_context = '''
-    You are a helpful financial assistant. I may ask you questions about beudgeting, saving, investing, or other financial topics.
+    You are a helpful financial assistant. I may ask you questions about budgeting, saving, investing, or other financial topics.
     Do your best to provide helpful financial advice.
 '''
 
