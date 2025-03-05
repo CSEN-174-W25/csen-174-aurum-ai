@@ -54,7 +54,9 @@ class ChatInterface extends React.Component {
                 // ✅ Find latest assistant response
                 const lastAssistantMessage = response.data.context.find(msg => msg.role === "assistant");
                 if (lastAssistantMessage) {
-                    const finalContext = [...updatedContext, lastAssistantMessage];
+                    const formattedResponse = this.formatMessage(lastAssistantMessage.content);
+
+                    const finalContext = [...updatedContext, { role: "assistant", content: formattedResponse }];
                     this.setState({ context: finalContext });
 
                     // ✅ Save updated chat history
@@ -69,6 +71,12 @@ class ChatInterface extends React.Component {
         }
     };
 
+    formatMessage = (message) => {
+        return message
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")  // Convert **bold** to <strong>
+            .replace(/\n/g, "<br />"); // Convert \n to <br>
+        };
+
     render() {
         return (
             <>
@@ -80,7 +88,12 @@ class ChatInterface extends React.Component {
                                 .filter(cntx => cntx.role !== "system")
                                 .map((cntx, idx) => (
                                     <li className="dialogues" key={idx}>
-                                        <strong>{cntx.role === "user" ? "You" : "AurumAI"}:</strong> {cntx.content}
+                                        {" "}
+                                        {cntx.content ? (
+                                            <span dangerouslySetInnerHTML={{ __html: cntx.content }} />
+                                        ) : (
+                                            "Message could not be displayed."
+                                        )}
                                     </li>
                                 ))
                         ) : (

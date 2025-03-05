@@ -89,6 +89,9 @@ const Dashboard = () => {
         );
     };
 
+    const expensesToIncome = (financialData[2].value / financialData[1].value * 100).toFixed(0);
+    const savingsToIncome = (financialData[3].value / financialData[1].value * 100).toFixed(0);
+
     // Donut chart for investments
     const DonutChart = ({ data }) => {
         let cumulativePercentage = 0;
@@ -205,17 +208,17 @@ const Dashboard = () => {
                             <div className="overview-card">
                                 <h3 className="card-label">Monthly Income</h3>
                                 <p className="card-value">${financialData[1].value.toLocaleString()}</p>
-                                <span className="card-note">Next deposit: Mar 1</span>
+                                <span className="card-note">Next deposit: Apr 1</span>
                             </div>
                             <div className="overview-card">
                                 <h3 className="card-label">Monthly Expenses</h3>
                                 <p className="card-value">${financialData[2].value.toLocaleString()}</p>
-                                <span className="card-note">74% of income</span>
+                                <span className="card-note">{expensesToIncome}% of income</span>
                             </div>
                             <div className="overview-card">
                                 <h3 className="card-label">Savings</h3>
                                 <p className="card-value">${financialData[3].value.toLocaleString()}</p>
-                                <span className="card-note">26% of income</span>
+                                <span className="card-note">{savingsToIncome}% of income</span>
                             </div>
                         </div>
 

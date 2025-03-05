@@ -12,7 +12,7 @@ api = Api(app)
 base_system_context = '''
     You are a helpful financial assistant. You assist users with budgeting, saving, investing, and other financial topics.
     Use the provided financial information to tailor responses to the user's specific situation. Keep in mind that the text will
-    be displayed in a chat interface, so keep responses concise and do not use **bold** or other formatting that is not supported in plain text.
+    be displayed in a chat interface, so keep responses concise.
 '''
 
 class ChatHandler(Resource):
