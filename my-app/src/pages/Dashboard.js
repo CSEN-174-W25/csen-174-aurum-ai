@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Clock, DollarSign, CreditCard, TrendingUp, Target, BookOpen, Bell, Settings } from 'lucide-react';
 import './styles/Dashboard.css';
 import Information from './Information'; // Import the Information component
@@ -17,30 +17,63 @@ const Dashboard = () => {
         day: 'numeric'
     });
 
-    // Budget progress data
-    const [budgetCategories, setBudgetCategories] = useState([
-        { name: "Housing", spent: 1200, budget: 1500, color: "#4F46E5" },
-        { name: "Transportation", spent: 350, budget: 400, color: "#10B981" },
-        { name: "Food", spent: 450, budget: 600, color: "#F59E0B" },
-        { name: "Utilities", spent: 180, budget: 200, color: "#EC4899" },
-        { name: "Entertainment", spent: 220, budget: 300, color: "#8B5CF6" }
-    ]);
+    const [financialData, setFinancialData] = useState(() => {
+        const savedData = localStorage.getItem("financialData");
+        return savedData ? JSON.parse(savedData) : [
+            { name: "Balance", value: 24500.00 },
+            { name: "Income", value: 5200.00 },
+            { name: "Expenses", value: 3850.00 },
+            { name: "Savings", value: 1350.00 }
+        ];
+    });
 
-    const [goals, setGoals] = useState([
-        { name: "Emergency Fund", current: 4500, target: 10000, color: "#3B82F6" },
-        { name: "Retirement Savings", current: 35000, target: 500000, color: "#10B981" },
-        { name: "Debt Repayment", current: 5000, target: 15000, color: "#F59E0B" }
-    ]);
+    // Save financial data to localStorage when it changes
+    useEffect(() => {
+        localStorage.setItem("financialData", JSON.stringify(financialData));
+    }, [financialData]);
 
-    // Sample investment data
-    const [investments, setInvestments] = useState([
-        { type: "Stocks", percentage: 45, color: "#3B82F6" },
-        { type: "Bonds", percentage: 30, color: "#10B981" },
-        { type: "Real Estate", percentage: 15, color: "#F59E0B" },
-        { type: "Cash", percentage: 10, color: "#8B5CF6" }
-    ]);
+    const [budgetCategories, setBudgetCategories] = useState(() => {
+        const savedBudget = localStorage.getItem("budgetCategories");
+        return savedBudget ? JSON.parse(savedBudget) : [
+            { name: "Housing", spent: 1200, budget: 1500, color: "#4F46E5" },
+            { name: "Transportation", spent: 350, budget: 400, color: "#10B981" },
+            { name: "Food", spent: 450, budget: 600, color: "#F59E0B" },
+            { name: "Utilities", spent: 180, budget: 200, color: "#EC4899" },
+            { name: "Entertainment", spent: 220, budget: 300, color: "#8B5CF6" }
+        ];
+    });
 
-    // New state for managing views
+    useEffect(() => {
+        localStorage.setItem("budgetCategories", JSON.stringify(budgetCategories));
+    }, [budgetCategories]);
+
+    const [goals, setGoals] = useState(() => {
+        const savedGoals = localStorage.getItem("goals");
+        return savedGoals ? JSON.parse(savedGoals) : [
+            { name: "Emergency Fund", current: 4500, target: 10000, color: "#3B82F6" },
+            { name: "Retirement Savings", current: 35000, target: 500000, color: "#10B981" },
+            { name: "Debt Repayment", current: 5000, target: 15000, color: "#F59E0B" }
+        ];
+    });
+
+    useEffect(() => {
+        localStorage.setItem("goals", JSON.stringify(goals));
+    }, [goals]);
+
+    const [investments, setInvestments] = useState(() => {
+        const savedInvestments = localStorage.getItem("investments");
+        return savedInvestments ? JSON.parse(savedInvestments) : [
+            { type: "Stocks", percentage: 45, color: "#3B82F6" },
+            { type: "Bonds", percentage: 30, color: "#10B981" },
+            { type: "Real Estate", percentage: 15, color: "#F59E0B" },
+            { type: "Cash", percentage: 10, color: "#8B5CF6" }
+        ];
+    });
+
+    useEffect(() => {
+        localStorage.setItem("investments", JSON.stringify(investments));
+    }, [investments]);
+
     const [showInformation, setShowInformation] = useState(false);
 
     // Progress bar component
@@ -128,7 +161,9 @@ const Dashboard = () => {
             <div className="main-container">
                 {showInformation ? (
                     // Information component view
-                    <Information 
+                    <Information
+                        financialData={financialData}
+                        setFinancialData={setFinancialData}
                         budgetCategories={budgetCategories}
                         setBudgetCategories={setBudgetCategories}
                         goals={goals}
@@ -161,7 +196,7 @@ const Dashboard = () => {
                         <div className="financial-overview">
                             <div className="overview-card">
                                 <h3 className="card-label">Total Balance</h3>
-                                <p className="card-value">$24,500.00</p>
+                                <p className="card-value">${financialData[0].value.toLocaleString()}</p>
                                 <span className="card-trend positive">
                                     <TrendingUp size={14} className="trend-icon" />
                                     +2.5% this month
@@ -169,17 +204,17 @@ const Dashboard = () => {
                             </div>
                             <div className="overview-card">
                                 <h3 className="card-label">Monthly Income</h3>
-                                <p className="card-value">$5,200.00</p>
+                                <p className="card-value">${financialData[1].value.toLocaleString()}</p>
                                 <span className="card-note">Next deposit: Mar 1</span>
                             </div>
                             <div className="overview-card">
                                 <h3 className="card-label">Monthly Expenses</h3>
-                                <p className="card-value">$3,850.00</p>
+                                <p className="card-value">${financialData[2].value.toLocaleString()}</p>
                                 <span className="card-note">74% of income</span>
                             </div>
                             <div className="overview-card">
                                 <h3 className="card-label">Savings</h3>
-                                <p className="card-value">$1,350.00</p>
+                                <p className="card-value">${financialData[3].value.toLocaleString()}</p>
                                 <span className="card-note">26% of income</span>
                             </div>
                         </div>
