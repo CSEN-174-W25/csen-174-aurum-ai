@@ -1,5 +1,5 @@
 // Router
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 
 // Pages
 import Chat from "./pages/Chat";
@@ -11,10 +11,15 @@ import Register from "./pages/Register";
 // Components
 import Navbar from "./components/navbar";
 
-function App() {
+// Create a wrapper component to handle the navbar logic
+const AppContent = () => {
+  const location = useLocation();
+  const hideNavbarPaths = ['/', '/register']; // paths where navbar should be hidden
+  const showNavbar = !hideNavbarPaths.includes(location.pathname);
+
   return (
-    <Router>
-      <Navbar />
+    <>
+      {showNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -22,6 +27,14 @@ function App() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/advice" element={<Advice />} />
       </Routes>
+    </>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
