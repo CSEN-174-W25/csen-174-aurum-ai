@@ -69,16 +69,23 @@
     background-color: #34495e;
 }
 
+.sign-up {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: small;
+}
+
+.sign-up a, .sign-up a:visited {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
 .google-button {
-    background-color: white;
-    color: #2c3e50;
-    border: 1px solid #2c3e50;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
 }
-
-.google-button:hover {
-    background-color: #f8f9fa;
-}
-
 .divider {
     display: flex;
     align-items: center;
