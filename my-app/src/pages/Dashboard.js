@@ -113,7 +113,6 @@ const Dashboard = () => {
             {/* Navigation Bar */}
             <nav className="navigation">
                 <div className="nav-container">
-                    <h1 className="logo">AurumAI</h1>
                     <div className="nav-right">
                         <span className="current-date">{currentDate}</span>
                         <button 

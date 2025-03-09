@@ -32,16 +32,15 @@
   
   /* Navigation Styles */
   .navigation {
-    background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-    padding: 16px 24px;
+    margin: 0 auto;
+    padding: 24px 16px 0;
   }
   
   .nav-container {
-    max-width: 1280px;
+    min-width: 1248px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
   }
   
@@ -60,6 +59,12 @@
   .current-date {
     color: #6b7280;
     font-size: 14px;
+  }
+
+  .edit-button{
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
   
   /* Main Container */
