@@ -2,29 +2,35 @@ import React, { useState } from 'react';
 import './styles/Information.css';
 
 const Information = ({ 
-  budgetCategories, 
-  setBudgetCategories,
-  goals,
-  setGoals,
-  investments,
-  setInvestments
+  financialData, setFinancialData,
+  budgetCategories, setBudgetCategories,
+  goals, setGoals,
+  investments, setInvestments
 }) => {
   // Create state for form data
   const [activeCategoryTab, setActiveCategoryTab] = useState('budget');
 
-  // Form handling for budget categories
-  const handleBudgetChange = (index, field, value) => {
-    const updatedCategories = [...budgetCategories];
-    updatedCategories[index][field] = field === 'name' ? value : Number(value);
-    setBudgetCategories(updatedCategories);
-  };
+  const handleFinancialChange = (index, value) => {
+    const updatedData = financialData.map((item, i) => 
+        i === index ? { ...item, value: parseFloat(value) || 0 } : item
+    );
+    setFinancialData(updatedData);
+    localStorage.setItem("financialData", JSON.stringify(updatedData));
+};
 
-  // Form handling for financial goals
-  const handleGoalChange = (index, field, value) => {
+const handleBudgetChange = (index, field, value) => {
+    const updatedBudget = [...budgetCategories];
+    updatedBudget[index][field] = field === 'name' ? value : Number(value);
+    setBudgetCategories(updatedBudget);
+    localStorage.setItem("budgetCategories", JSON.stringify(updatedBudget));
+};
+
+const handleGoalChange = (index, field, value) => {
     const updatedGoals = [...goals];
     updatedGoals[index][field] = field === 'name' ? value : Number(value);
     setGoals(updatedGoals);
-  };
+    localStorage.setItem("goals", JSON.stringify(updatedGoals));
+};
 
   // Form handling for investments
   const handleInvestmentChange = (index, field, value) => {
@@ -47,6 +53,7 @@ const Information = ({
     }
     
     setInvestments(updatedInvestments);
+    localStorage.setItem("investments", JSON.stringify(updatedInvestments));
   };
 
   // Color picker for categories
@@ -113,6 +120,12 @@ const Information = ({
       <h1>Financial Information</h1>
       
       <div className="tabs">
+      <button 
+          className={`tab ${activeCategoryTab === 'financial' ? 'active' : ''}`}
+          onClick={() => setActiveCategoryTab('financial')}
+        >
+          Financial Data
+        </button>
         <button 
           className={`tab ${activeCategoryTab === 'budget' ? 'active' : ''}`}
           onClick={() => setActiveCategoryTab('budget')}
@@ -134,6 +147,28 @@ const Information = ({
       </div>
       
       <div className="tab-content">
+        {/* Financial Data Tab */}
+        {activeCategoryTab === 'financial' && (
+          <div className="category-section">
+            <h2>Financial Data</h2>
+            <div className="items-container">
+              {financialData.map((category, index) => (
+                <div key={index} className="item-card">
+                  <div className="item-inputs">
+                    <div className="input-group">
+                      <label>{category.name}:</label>
+                      <input 
+                        type="number" 
+                        value={category.value}
+                        onChange={(e) => handleFinancialChange(index, e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {/* Budget Categories Tab */}
         {activeCategoryTab === 'budget' && (
           <div className="category-section">
