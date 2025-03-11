@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Navigate, Link, useNavigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { runCreateUserWithEmailAndPassword } from '../firebase/auth';
 import { useAuth } from '../contexts/authContext';
+import { getAuth, updateProfile } from 'firebase/auth';
 import './styles/Login.css';
 
 const Register = () => {
-    const navigate = useNavigate();
-
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setconfirmPassword] = useState('');
@@ -14,6 +14,7 @@ const Register = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const { userLoggedIn } = useAuth();
+    const auth = getAuth();
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -21,6 +22,13 @@ const Register = () => {
             setIsRegistering(true)
             await runCreateUserWithEmailAndPassword(email, password)
         }
+        updateProfile(auth.currentUser, {  
+            displayName: name
+        }).then(() => {
+            console.log('User profile updated');
+        }).catch((error) => {         
+            console.log(error);
+        });
     }
 
     return (
@@ -29,6 +37,17 @@ const Register = () => {
             <div className="login-box">
                 <h2>Create an account with AurumAI</h2>                
                 <form onSubmit={onSubmit} className="login-form">
+                    <div className="form-group">
+                        <label htmlFor="name">Name</label>
+                        <input
+                            type="text"
+                            autoComplete='name'
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
                         <input

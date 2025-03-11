@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, DollarSign, CreditCard, TrendingUp, Target, BookOpen, Bell, Settings } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { runSignOut } from '../firebase/auth';
 import { useAuth } from '../contexts/authContext';
+import { getAuth } from 'firebase/auth';
 
 import './styles/Dashboard.css';
 import Information from './Information'; // Import the Information component
@@ -10,6 +11,8 @@ import Information from './Information'; // Import the Information component
 const Dashboard = () => {
     const navigate = useNavigate()
     const { userLoggedIn } = useAuth()
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
 
     // Sample data - you would replace with real data
     const [user, setUser] = useState({
@@ -185,7 +188,7 @@ const Dashboard = () => {
                         <div className="card welcome-card">
                             <div className="welcome-content">
                                 <div>
-                                    <h2 className="welcome-title">Welcome back, {user.name}</h2>
+                                    <h2 className="welcome-title">Welcome back, {currentUser.displayName}</h2>
                                     <p className="welcome-subtitle">Let's manage your finances today</p>
                                 </div>
                                 <div className="last-login">
