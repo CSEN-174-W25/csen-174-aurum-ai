@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_restful import Api, Resource
@@ -8,12 +9,18 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_cred
 
 api = Api(app)
 
+CONTEXT_DIR = "../public/sources"
 
-base_system_context = '''
-    You are a helpful financial assistant. You assist users with budgeting, saving, investing, and other financial topics.
-    Use the provided financial information to tailor responses to the user's specific situation. Keep in mind that the text will
-    be displayed in a chat interface, so keep responses concise.
-'''
+def load_text_from_files():
+    """Loads and combines content from text files in CONTEXT_DIR."""
+    context_data = {}
+    if not os.path.exists(CONTEXT_DIR):
+        return context_data  # Return empty if directory doesn't exist
+
+    for filename in os.listdir(CONTEXT_DIR):
+        if filename.endswith(".txt"):
+            with open(os.path.join(CONTEXT_DIR, filename), "r", encoding="utf-8") as file:
+                context_data[filename.replace(".txt", "")] = file.read()
 
 class ChatHandler(Resource):
     def __init__(self, **kwargs):
@@ -34,6 +41,13 @@ class ChatHandler(Resource):
         rqs = request.json
         prompt = rqs.get('prompt')
         user_data = rqs.get('userData', {})
+
+        # Load financial context from text files
+        file_contexts = load_text_from_files()
+
+        # Combine all text file data into a system prompt
+        text_context = "\n\n".join([f"### {key.capitalize()} ###\n{value}" for key, value in file_contexts.items()])
+
 
         user_context = f"""
         The user is {user_data.get('name', 'Unknown')} and last logged in on {user_data.get('lastLogin', 'Unknown')}.
@@ -64,7 +78,16 @@ class ChatHandler(Resource):
         Use this information to personalize your financial advice.
         """
 
-        context = [{"role": "system", "content": base_system_context + user_context}]
+        system_context = f"""
+        You are a financial assistant providing expert advice on budgeting, investing, and financial planning.
+        Use the following financial knowledge as context:
+        {text_context}
+        
+        Additionally, personalize responses using the user’s financial details:
+        {user_context}
+        """
+
+        context = [{"role": "system", "content": system_context}]
         context.append({"role": "user", "content": prompt})
 
         response_data = collect_messages(prompt, context)
