@@ -29,7 +29,6 @@ const Navbar = () => {
                     <Link to="/" onClick={handleLinkClick}>Home</Link>
                     <Link to="/chat" onClick={handleLinkClick}>Chat</Link>
                     <Link to="/advice" onClick={handleLinkClick}>Advice Pages</Link>
-                    <Link to="/information" onClick={handleLinkClick}>Information</Link>
                 </div>
             </div>
 

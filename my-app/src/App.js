@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import Chat from "./pages/Chat";
 import Dashboard from "./pages/Dashboard";
 import Advice from "./pages/Advice";
+import ArticleDetail from "./components/ArticleDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
@@ -26,6 +27,7 @@ const AppContent = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/advice" element={<Advice />} />
+        <Route path="/advice/:slug" element={<ArticleDetail/>} />
       </Routes>
     </>
   );
