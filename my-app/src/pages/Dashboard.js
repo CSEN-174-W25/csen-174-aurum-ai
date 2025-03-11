@@ -17,7 +17,7 @@ const Dashboard = () => {
     // Sample data - you would replace with real data
     const [user, setUser] = useState({
         name: "Riley Heike",
-        lastLogin: "February 25, 2025"
+        lastLogin: "March 10, 2025"
     });
 
     const currentDate = new Date().toLocaleDateString('en-US', {
