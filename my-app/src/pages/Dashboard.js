@@ -16,7 +16,7 @@ const Dashboard = () => {
 
     const [user, setUser] = useState({
         lastLogin: "February 25, 2025"
-    }); 
+    });
 
     const currentDate = new Date().toLocaleDateString('en-US', {
         weekday: 'long',

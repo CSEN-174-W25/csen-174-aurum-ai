@@ -14,13 +14,28 @@ CONTEXT_DIR = "../public/sources"
 def load_text_from_files():
     """Loads and combines content from text files in CONTEXT_DIR."""
     context_data = {}
+
+    # Ensure directory exists before reading files
     if not os.path.exists(CONTEXT_DIR):
-        return context_data  # Return empty if directory doesn't exist
+        print(f"🚨 Directory '{CONTEXT_DIR}' does not exist!")  # Debugging log
+        return context_data  # ✅ Return empty dictionary instead of None
 
     for filename in os.listdir(CONTEXT_DIR):
         if filename.endswith(".txt"):
-            with open(os.path.join(CONTEXT_DIR, filename), "r", encoding="utf-8") as file:
-                context_data[filename.replace(".txt", "")] = file.read()
+            file_path = os.path.join(CONTEXT_DIR, filename)
+            try:
+                with open(file_path, "r", encoding="utf-8") as file:
+                    context_data[filename.replace(".txt", "")] = file.read()
+            except Exception as e:
+                print(f"🚨 Error reading {file_path}: {e}")  # Debugging log
+
+    return context_data
+
+base_system_context = '''
+    You are a helpful financial assistant. You assist users with budgeting, saving, investing, and other financial topics.
+    Use the provided financial information to tailor responses to the user's specific situation. Keep in mind that the text will
+    be displayed in a chat interface, so keep responses concise. Refrain from using #
+'''
 
 class ChatHandler(Resource):
     def __init__(self, **kwargs):
@@ -54,7 +69,7 @@ class ChatHandler(Resource):
         Today is {user_data.get('currentDate', 'Unknown')}.
 
         Their financial summary:
-        - **Income:** ${user_data.get('income', 0)}
+        - **Monthly Income:** ${user_data.get('income', 0)}
         - **Expenses:** ${user_data.get('expenses', 0)}
         - **Savings:** ${user_data.get('savings', 0)}
         - **Investment Allocation:**
