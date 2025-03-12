@@ -58,10 +58,10 @@ class ChatHandler(Resource):
         - **Expenses:** ${user_data.get('expenses', 0)}
         - **Savings:** ${user_data.get('savings', 0)}
         - **Investment Allocation:**
-          - Stocks: {user_data.get('investments', {}).get('Stocks', 0)}%
-          - Bonds: {user_data.get('investments', {}).get('Bonds', 0)}%
-          - Real Estate: {user_data.get('investments', {}).get('Real Estate', 0)}%
-          - Cash: {user_data.get('investments', {}).get('Cash', 0)}%
+            - Stocks: {user_data.get('investments', {}).get('Stocks', 0)}%
+            - Bonds: {user_data.get('investments', {}).get('Bonds', 0)}%
+            - Real Estate: {user_data.get('investments', {}).get('Real Estate', 0)}%
+            - Cash: {user_data.get('investments', {}).get('Cash', 0)}%
 
         - **Budget Progress:**
         """ + '\n'.join([

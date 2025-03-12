@@ -28,7 +28,7 @@ const Navbar = () => {
                 <div className={`menu-dropdown ${isMenuOpen ? 'active' : ''}`}>
                     <Link to="/" onClick={handleLinkClick}>Home</Link>
                     <Link to="/chat" onClick={handleLinkClick}>Chat</Link>
-                    <Link to="/advice" onClick={handleLinkClick}>Advice Pages</Link>
+                    <Link to="/advice" onClick={handleLinkClick}>Advice</Link>
                 </div>
             </div>
 
