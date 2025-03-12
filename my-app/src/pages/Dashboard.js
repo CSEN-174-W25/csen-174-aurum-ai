@@ -350,7 +350,7 @@ const Dashboard = () => {
             {/* Footer */}
             <footer className="footer">
                 <div className="footer-container">
-                    <p className="copyright">© 2025 FinanceWise. All rights reserved.</p>
+                    <p className="copyright">© 2025 AurumAI. All rights reserved.</p>
                     <div className="footer-links">
                         <a href="#" className="footer-link">Privacy Policy</a>
                         <a href="#" className="footer-link">Terms of Service</a>
