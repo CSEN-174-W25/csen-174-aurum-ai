@@ -1,4 +1,15 @@
 import React, { useState } from 'react';
+import { useAuth } from '../contexts/authContext';
+import {
+  updateFinancialData,
+  updateBudgetCategory,
+  updateFinancialGoal,
+  updateInvestment,
+  addBudgetCategory as addFirestoreBudgetCategory,
+  addFinancialGoal as addFirestoreGoal,
+  addInvestment as addFirestoreInvestment,
+  deleteArrayItem
+} from '../firebase/firestore';
 import './styles/Information.css';
 
 const Information = ({ 
@@ -7,37 +18,46 @@ const Information = ({
   goals, setGoals,
   investments, setInvestments
 }) => {
-  // Create state for form data
   const [activeCategoryTab, setActiveCategoryTab] = useState('budget');
+  const { currentUser } = useAuth();
 
-  const handleFinancialChange = (index, value) => {
+  const handleFinancialChange = async (index, value) => {
     const updatedData = financialData.map((item, i) => 
-        i === index ? { ...item, value: parseFloat(value) || 0 } : item
+      i === index ? { ...item, value: parseFloat(value) || 0 } : item
     );
     setFinancialData(updatedData);
-    localStorage.setItem("financialData", JSON.stringify(updatedData));
-};
+    
+    // Convert to Firestore format
+    const firestoreData = {
+      currentBalance: updatedData[0].value,
+      income: updatedData[1].value,
+      expenses: updatedData[2].value,
+      savings: updatedData[3].value
+    };
+    
+    await updateFinancialData(currentUser.uid, firestoreData);
+  };
 
-const handleBudgetChange = (index, field, value) => {
+  const handleBudgetChange = async (index, field, value) => {
     const updatedBudget = [...budgetCategories];
     updatedBudget[index][field] = field === 'name' ? value : Number(value);
     setBudgetCategories(updatedBudget);
-    localStorage.setItem("budgetCategories", JSON.stringify(updatedBudget));
-};
+    
+    await updateBudgetCategory(currentUser.uid, updatedBudget[index]);
+  };
 
-const handleGoalChange = (index, field, value) => {
+  const handleGoalChange = async (index, field, value) => {
     const updatedGoals = [...goals];
     updatedGoals[index][field] = field === 'name' ? value : Number(value);
     setGoals(updatedGoals);
-    localStorage.setItem("goals", JSON.stringify(updatedGoals));
-};
+    
+    await updateFinancialGoal(currentUser.uid, updatedGoals[index]);
+  };
 
-  // Form handling for investments
-  const handleInvestmentChange = (index, field, value) => {
+  const handleInvestmentChange = async (index, field, value) => {
     const updatedInvestments = [...investments];
     
     if (field === 'percentage') {
-      // Ensure percentages don't exceed 100%
       const newValue = Number(value);
       const currentTotal = investments.reduce((sum, inv, i) => 
         i !== index ? sum + inv.percentage : sum, 0);
@@ -46,18 +66,16 @@ const handleGoalChange = (index, field, value) => {
         alert("Total investment percentage cannot exceed 100%");
         return;
       }
-      
       updatedInvestments[index][field] = newValue;
     } else {
       updatedInvestments[index][field] = value;
     }
     
     setInvestments(updatedInvestments);
-    localStorage.setItem("investments", JSON.stringify(updatedInvestments));
+    await updateInvestment(currentUser.uid, updatedInvestments[index]);
   };
 
-  // Color picker for categories
-  const handleColorChange = (index, category, value) => {
+  const handleColorChange = async (index, category, value) => {
     const updatedItems = category === 'budget' 
       ? [...budgetCategories] 
       : category === 'goals' 
@@ -68,50 +86,87 @@ const handleGoalChange = (index, field, value) => {
     
     if (category === 'budget') {
       setBudgetCategories(updatedItems);
+      await updateBudgetCategory(currentUser.uid, updatedItems[index]);
     } else if (category === 'goals') {
       setGoals(updatedItems);
+      await updateFinancialGoal(currentUser.uid, updatedItems[index]);
     } else {
       setInvestments(updatedItems);
+      await updateInvestment(currentUser.uid, updatedItems[index]);
     }
   };
 
-  // Add new item functions
-  const addBudgetCategory = () => {
-    setBudgetCategories([
-      ...budgetCategories, 
-      { name: "New Category", spent: 0, budget: 0, color: "#" + Math.floor(Math.random()*16777215).toString(16) }
-    ]);
+  const addBudgetCategory = async () => {
+    const newCategory = {
+      name: "New Category",
+      spent: 0,
+      budget: 0,
+      color: "#" + Math.floor(Math.random()*16777215).toString(16)
+    };
+    
+    const { success, data } = await addFirestoreBudgetCategory(currentUser.uid, newCategory);
+    if (success) {
+      setBudgetCategories([...budgetCategories, data]);
+    }
   };
 
-  const addGoal = () => {
-    setGoals([
-      ...goals,
-      { name: "New Goal", current: 0, target: 0, color: "#" + Math.floor(Math.random()*16777215).toString(16) }
-    ]);
+  const addGoal = async () => {
+    const newGoal = {
+      name: "New Goal",
+      current: 0,
+      target: 0,
+      color: "#" + Math.floor(Math.random()*16777215).toString(16)
+    };
+    
+    const { success, data } = await addFirestoreGoal(currentUser.uid, newGoal);
+    if (success) {
+      setGoals([...goals, data]);
+    }
   };
 
-  const addInvestment = () => {
-    // Check if we still have room (less than 100%)
+  const addInvestment = async () => {
     const currentTotal = investments.reduce((sum, inv) => sum + inv.percentage, 0);
     if (currentTotal >= 100) {
-      alert("Total investment percentage is already at 100%. Adjust existing investments before adding new ones.");
+      alert("Total investment percentage is already at 100%");
       return;
     }
     
-    setInvestments([
-      ...investments,
-      { type: "New Investment", percentage: 0, color: "#" + Math.floor(Math.random()*16777215).toString(16) }
-    ]);
+    const newInvestment = {
+      type: "New Investment",
+      percentage: 0,
+      color: "#" + Math.floor(Math.random()*16777215).toString(16)
+    };
+    
+    const { success, data } = await addFirestoreInvestment(currentUser.uid, newInvestment);
+    if (success) {
+      setInvestments([...investments, data]);
+    }
   };
 
-  // Remove item functions
-  const removeItem = (index, category) => {
-    if (category === 'budget') {
-      setBudgetCategories(budgetCategories.filter((_, i) => i !== index));
-    } else if (category === 'goals') {
-      setGoals(goals.filter((_, i) => i !== index));
-    } else {
-      setInvestments(investments.filter((_, i) => i !== index));
+  const removeItem = async (index, category) => {
+    const items = category === 'budget' 
+      ? budgetCategories 
+      : category === 'goals' 
+        ? goals 
+        : investments;
+    
+    const itemId = items[index].id;
+    const arrayName = category === 'budget' 
+      ? 'budgetCategories' 
+      : category === 'goals' 
+        ? 'financialGoals' 
+        : 'investments';
+
+    const { success } = await deleteArrayItem(currentUser.uid, arrayName, itemId);
+    
+    if (success) {
+      if (category === 'budget') {
+        setBudgetCategories(budgetCategories.filter((_, i) => i !== index));
+      } else if (category === 'goals') {
+        setGoals(goals.filter((_, i) => i !== index));
+      } else {
+        setInvestments(investments.filter((_, i) => i !== index));
+      }
     }
   };
 

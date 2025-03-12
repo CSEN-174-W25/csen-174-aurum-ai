@@ -1,26 +1,21 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import { Clock, DollarSign, CreditCard, TrendingUp, Target, BookOpen, Bell, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
-import { updateFinancialData } from '../firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { getUserProfile } from '../firebase/firestore';
 import './styles/Dashboard.css';
 import Information from './Information'; // Import the Information component
 
 const Dashboard = () => {
     const navigate = useNavigate()
-    const { userLoggedIn, logout, currentUser, userData, fetchUserData } = useAuth()
-    const [isEditing, setIsEditing] = useState(false);
+    const { logout, currentUser } = useAuth()
+    // const [isEditing, setIsEditing] = useState(false);
 
     const auth = getAuth();
-    // const [financialData, setFinancialData] = useState({
-    //     currentBalance: 0,
-    //     income: 0,
-    //     expenses: 0,
-    //     savings: 0
-    // });
 
-    const [user, setUser] = useState({
+    const [user] = useState({
         lastLogin: "February 25, 2025"
     });
 
@@ -31,92 +26,43 @@ const Dashboard = () => {
         day: 'numeric'
     });
 
-    const [financialData, setFinancialData] = useState(() => {
-        const savedData = localStorage.getItem("financialData");
-        return savedData ? JSON.parse(savedData) : [
-            { name: "Balance", value: 24500.00 },
-            { name: "Income", value: 5200.00 },
-            { name: "Expenses", value: 3850.00 },
-            { name: "Savings", value: 1350.00 }
-        ];
-    });
+    const [financialData, setFinancialData] = useState([
+        { name: "Balance", value: 0 },
+        { name: "Income", value: 0 },
+        { name: "Expenses", value: 0 },
+        { name: "Savings", value: 0 }
+    ]);
 
-    // Save financial data to localStorage when it changes
-    useEffect(() => {
-        localStorage.setItem("financialData", JSON.stringify(financialData));
-    }, [financialData]);
-
-    const [budgetCategories, setBudgetCategories] = useState(() => {
-        const savedBudget = localStorage.getItem("budgetCategories");
-        return savedBudget ? JSON.parse(savedBudget) : [
-            { name: "Housing", spent: 1200, budget: 1500, color: "#4F46E5" },
-            { name: "Transportation", spent: 350, budget: 400, color: "#10B981" },
-            { name: "Food", spent: 450, budget: 600, color: "#F59E0B" },
-            { name: "Utilities", spent: 180, budget: 200, color: "#EC4899" },
-            { name: "Entertainment", spent: 220, budget: 300, color: "#8B5CF6" }
-        ];
-    });
-
-    useEffect(() => {
-        localStorage.setItem("budgetCategories", JSON.stringify(budgetCategories));
-    }, [budgetCategories]);
-
-    const [goals, setGoals] = useState(() => {
-        const savedGoals = localStorage.getItem("goals");
-        return savedGoals ? JSON.parse(savedGoals) : [
-            { name: "Emergency Fund", current: 4500, target: 10000, color: "#3B82F6" },
-            { name: "Retirement Savings", current: 35000, target: 500000, color: "#10B981" },
-            { name: "Debt Repayment", current: 5000, target: 15000, color: "#F59E0B" }
-        ];
-    });
-
-    useEffect(() => {
-        localStorage.setItem("goals", JSON.stringify(goals));
-    }, [goals]);
-
-    const [investments, setInvestments] = useState(() => {
-        const savedInvestments = localStorage.getItem("investments");
-        return savedInvestments ? JSON.parse(savedInvestments) : [
-            { type: "Stocks", percentage: 45, color: "#3B82F6" },
-            { type: "Bonds", percentage: 30, color: "#10B981" },
-            { type: "Real Estate", percentage: 15, color: "#F59E0B" },
-            { type: "Cash", percentage: 10, color: "#8B5CF6" }
-        ];
-    });
-
-    useEffect(() => {
-        localStorage.setItem("investments", JSON.stringify(investments));
-    }, [investments]);
+    const [budgetCategories, setBudgetCategories] = useState([]);
+    const [goals, setGoals] = useState([]);
+    const [investments, setInvestments] = useState([]);
 
     const [showInformation, setShowInformation] = useState(false);
 
     // Firestore data sync
+    useEffect(() => {
+        const loadUserData = async () => {
+            if (!currentUser) return;
 
-    // useEffect(() => {
-    //     if (userData?.financialData) {
-    //     setFinancialData(userData.financialData);
-    //     }
-    // }, [userData]);
-    
-    // const handleFinancialDataChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFinancialData(prev => ({
-    //     ...prev,
-    //     [name]: parseFloat(value) || 0
-    //     }));
-    // };
-    
-    // const saveFinancialData = async () => {
-    //     if (!currentUser) return;
-        
-    //     try {
-    //     await updateFinancialData(currentUser.uid, financialData);
-    //     await fetchUserData(currentUser.uid);
-    //     setIsEditing(false);
-    //     } catch (error) {
-    //     console.error("Error saving financial data:", error);
-    //     }
-    // };
+            const { success, data } = await getUserProfile(currentUser.uid);
+            if (success && data) {
+                // Convert Firestore financial data to array format
+                setFinancialData([
+                    { name: "Balance", value: data.financialData.currentBalance },
+                    { name: "Income", value: data.financialData.income },
+                    { name: "Expenses", value: data.financialData.expenses },
+                    { name: "Savings", value: data.financialData.savings }
+                ]);
+
+                // Set other data
+                setBudgetCategories(data.budgetCategories || []);
+                setGoals(data.financialGoals || []);
+                setInvestments(data.investments || []);
+            }
+        };
+
+        loadUserData();
+    }, [currentUser]);
 
     // Progress bar component
     const ProgressBar = ({ spent, budget, color }) => {
