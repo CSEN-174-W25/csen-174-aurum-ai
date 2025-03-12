@@ -1,0 +1,22 @@
+Paying the 2025 Tax Bill: Income Tax Rates and Thresholds
+By Andrew Lautz
+December 12, 2024
+
+Dozens of major individual and business tax policies from the 2017 Tax Cuts and Jobs Act (TCJA) will expire at the end of 2025...
+(Full content here, including all tables as previously formatted)
+
+Table 1: Income Tax Rates for Single Filers Before and After TCJA
+
+-------------------------------------------------------------
+| 2017 Rate | 2018-2025 Rate | 2017 Threshold   | 2018 Threshold   | 2024 Threshold   |
+-------------------------------------------------------------
+| 10%       | 10%            | $0-$9,325        | $0-$9,525        | $0-$11,600       |
+| 15%       | 12%            | $9,325-$37,950   | $9,525-$38,700   | $11,600-$47,150  |
+| 25%       | 22%            | $37,950-$91,900  | $38,700-$82,500  | $47,150-$100,525 |
+| 28%       | 24%            | $91,900-$191,650 | $82,500-$157,500 | $100,525-$191,950|
+| 33%       | 32%            | $191,650-$416,700| $157,500-$200,000| $191,950-$243,725|
+| 35%       | 35%            | $416,700-$418,400| $200,000-$500,000| $243,725-$609,350|
+| 39.6%     | 37%            | $418,400+        | $500,000+        | $609,350+        |
+-------------------------------------------------------------
+
+(Additional tables and content continue...)
