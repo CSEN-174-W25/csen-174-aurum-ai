@@ -4,7 +4,7 @@ import { db } from './firebaseConfig';
 // User profile and financial data structure
 
 /*
-users/{userId}/
+financialData/{userId}/
     - personalInfo: {}
     - financialData: {
         currentBalance: number,
@@ -40,7 +40,7 @@ users/{userId}/
 // Create or update user profile
 export const createUserProfile = async (userId, userData) => {
     try {
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     await setDoc(userRef, userData, { merge: true });
     return { success: true };
     } catch (error) {
@@ -52,7 +52,7 @@ export const createUserProfile = async (userId, userData) => {
 // Get user profile
 export const getUserProfile = async (userId) => {
     try {
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     const userSnap = await getDoc(userRef);
     
     if (userSnap.exists()) {
@@ -69,7 +69,7 @@ export const getUserProfile = async (userId) => {
 // Update financial data
 export const updateFinancialData = async (userId, financialData) => {
     try {
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     await updateDoc(userRef, { financialData });
     return { success: true };
     } catch (error) {
@@ -81,7 +81,7 @@ export const updateFinancialData = async (userId, financialData) => {
 // Add budget category
 export const addBudgetCategory = async (userId, category) => {
     try {
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     const categoryWithId = {
         ...category,
         id: Date.now().toString() // Simple ID generation
@@ -111,7 +111,7 @@ export const updateBudgetCategory = async (userId, updatedCategory) => {
     );
     
     // Update in Firestore
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     await updateDoc(userRef, { budgetCategories: updatedCategories });
     
     return { success: true };
@@ -124,7 +124,7 @@ export const updateBudgetCategory = async (userId, updatedCategory) => {
 // Add financial goal
 export const addFinancialGoal = async (userId, goal) => {
     try {
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     const goalWithId = {
         ...goal,
         id: Date.now().toString()
@@ -154,7 +154,7 @@ export const updateFinancialGoal = async (userId, updatedGoal) => {
     );
     
     // Update in Firestore
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     await updateDoc(userRef, { financialGoals: updatedGoals });
     
     return { success: true };
@@ -167,7 +167,7 @@ export const updateFinancialGoal = async (userId, updatedGoal) => {
 // Add investment
 export const addInvestment = async (userId, investment) => {
     try {
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     const investmentWithId = {
         ...investment,
         id: Date.now().toString()
@@ -197,7 +197,7 @@ export const updateInvestment = async (userId, updatedInvestment) => {
     );
     
     // Update in Firestore
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     await updateDoc(userRef, { investments: updatedInvestments });
     
     return { success: true };
@@ -218,7 +218,7 @@ export const deleteArrayItem = async (userId, arrayName, itemId) => {
     const updatedItems = items.filter(item => item.id !== itemId);
     
     // Update in Firestore
-    const userRef = doc(db, 'users', userId);
+    const userRef = doc(db, 'financialData', userId);
     await updateDoc(userRef, { [arrayName]: updatedItems });
     
     return { success: true };

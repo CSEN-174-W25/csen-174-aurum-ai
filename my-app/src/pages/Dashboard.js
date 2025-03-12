@@ -2,16 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Clock, DollarSign, CreditCard, TrendingUp, Target, BookOpen, Bell, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
+import { updateFinancialData } from '../firebase/firestore';
 import { getAuth } from 'firebase/auth';
-
 import './styles/Dashboard.css';
 import Information from './Information'; // Import the Information component
 
 const Dashboard = () => {
     const navigate = useNavigate()
-    const { userLoggedIn, logout } = useAuth()
+    const { userLoggedIn, logout, currentUser, userData, fetchUserData } = useAuth()
+    const [isEditing, setIsEditing] = useState(false);
+
     const auth = getAuth();
-    const currentUser = auth.currentUser;
+    // const [financialData, setFinancialData] = useState({
+    //     currentBalance: 0,
+    //     income: 0,
+    //     expenses: 0,
+    //     savings: 0
+    // });
 
     const [user, setUser] = useState({
         lastLogin: "February 25, 2025"
@@ -82,6 +89,34 @@ const Dashboard = () => {
     }, [investments]);
 
     const [showInformation, setShowInformation] = useState(false);
+
+    // Firestore data sync
+
+    // useEffect(() => {
+    //     if (userData?.financialData) {
+    //     setFinancialData(userData.financialData);
+    //     }
+    // }, [userData]);
+    
+    // const handleFinancialDataChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFinancialData(prev => ({
+    //     ...prev,
+    //     [name]: parseFloat(value) || 0
+    //     }));
+    // };
+    
+    // const saveFinancialData = async () => {
+    //     if (!currentUser) return;
+        
+    //     try {
+    //     await updateFinancialData(currentUser.uid, financialData);
+    //     await fetchUserData(currentUser.uid);
+    //     setIsEditing(false);
+    //     } catch (error) {
+    //     console.error("Error saving financial data:", error);
+    //     }
+    // };
 
     // Progress bar component
     const ProgressBar = ({ spent, budget, color }) => {
@@ -185,7 +220,7 @@ const Dashboard = () => {
                         <div className="card welcome-card">
                             <div className="welcome-content">
                                 <div>
-                                    <h2 className="welcome-title">Welcome back, {currentUser.displayName}</h2>
+                                    <h2 className="welcome-title">Welcome back, {auth.currentUser.displayName}</h2>
                                     <p className="welcome-subtitle">Let's manage your finances today</p>
                                 </div>
                                 <div className="last-login">
