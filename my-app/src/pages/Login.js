@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { runSignInWithEmailAndPassword, runSignInWithGoogle } from '../firebase/auth';
+import { runSignInWithGoogle } from '../firebase/auth';
 import { useAuth } from '../contexts/authContext';
 import './styles/Login.css';
 
 const Login = () => {
-    const { userLoggedIn } = useAuth();
+    const { userLoggedIn, login } = useAuth();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,16 +13,15 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         setErrorMessage('');
-        
+
         if (!isSigningIn) {
-            setIsSigningIn(true)
+            setIsSigningIn(true);
             try {
-                await runSignInWithEmailAndPassword(email, password);
+                await login(email, password);
             } catch (error) {
                 setIsSigningIn(false);
-                // Handle specific Firebase auth errors
                 switch (error.code) {
                     case 'auth/invalid-email':
                         setErrorMessage('Invalid email address');
@@ -42,14 +41,14 @@ const Login = () => {
                 }
             }
         }
-    }
+    };
 
     const onGoogleSignIn = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
         setErrorMessage('');
-        
+
         if (!isSigningIn) {
-            setIsSigningIn(true)
+            setIsSigningIn(true);
             try {
                 await runSignInWithGoogle();
             } catch (error) {
@@ -57,11 +56,11 @@ const Login = () => {
                 setErrorMessage('Failed to sign in with Google. Please try again.');
             }
         }
-    }
+    };
 
     return (
         <div className="login-container">
-            {userLoggedIn && (<Navigate to={'/dashboard'} replace={true} />)}
+            {userLoggedIn && <Navigate to={'/dashboard'} replace={true} />}
             <div className="login-box">
                 <h2>Welcome to AurumAI</h2>                
                 <form onSubmit={onSubmit} className="login-form">
@@ -87,11 +86,7 @@ const Login = () => {
                         />
                     </div>
 
-                    {errorMessage && (
-                        <div className="error-message">
-                            {errorMessage}
-                        </div>
-                    )}
+                    {errorMessage && <div className="error-message">{errorMessage}</div>}
 
                     <button type="submit" className="login-button" disabled={isSigningIn}>
                         {isSigningIn ? 'Signing In...' : 'Sign In'}
@@ -108,7 +103,7 @@ const Login = () => {
                 
                 <button
                     disabled={isSigningIn}
-                    onClick={(e) => { onGoogleSignIn(e) }}
+                    onClick={onGoogleSignIn}
                     className='google-button'
                 >
                     <svg width='20' viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">

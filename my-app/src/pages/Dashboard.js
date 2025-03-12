@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, DollarSign, CreditCard, TrendingUp, Target, BookOpen, Bell, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { runSignOut } from '../firebase/auth';
 import { useAuth } from '../contexts/authContext';
 import { getAuth } from 'firebase/auth';
 
@@ -10,7 +9,7 @@ import Information from './Information'; // Import the Information component
 
 const Dashboard = () => {
     const navigate = useNavigate()
-    const { userLoggedIn } = useAuth()
+    const { userLoggedIn, logout } = useAuth()
     const auth = getAuth();
     const currentUser = auth.currentUser;
 
@@ -160,7 +159,7 @@ const Dashboard = () => {
                             <Settings size={18} />
                             {showInformation ? "Dashboard" : "Edit Data"}
                         </button>
-                        <button onClick={() => { runSignOut().then(() => { navigate('/') }) }}>Logout</button>
+                        <button onClick={() => { logout().then(() => { navigate('/') }) }}>Logout</button>
                     </div>
                 </div>
             </nav>

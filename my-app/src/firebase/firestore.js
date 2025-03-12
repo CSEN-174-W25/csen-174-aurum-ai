@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from './config';
+import { db } from './firebaseConfig';
 
 // User profile and financial data structure
 

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { runCreateUserWithEmailAndPassword } from '../firebase/auth';
 import { useAuth } from '../contexts/authContext';
 import { getAuth, updateProfile } from 'firebase/auth';
 import './styles/Login.css';
@@ -13,7 +12,7 @@ const Register = () => {
     const [isRegistering, setIsRegistering] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const { userLoggedIn } = useAuth();
+    const { userLoggedIn, signup } = useAuth();
     const auth = getAuth();
 
     const onSubmit = async (e) => {
@@ -35,7 +34,7 @@ const Register = () => {
         if (!isRegistering) {
             setIsRegistering(true);
             try {
-                await runCreateUserWithEmailAndPassword(email, password);
+                await signup(email, password);
                 await updateProfile(auth.currentUser, {
                     displayName: name
                 });
