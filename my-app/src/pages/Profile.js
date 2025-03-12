@@ -1,56 +1,111 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
-import { MapPin, Edit2, UserRound } from 'lucide-react';
+import { MapPin, Edit2, UserRound, Save, X } from 'lucide-react';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '../firebase/firebaseConfig';
 import './styles/Profile.css';
 
 function Profile() {
     const auth = getAuth();
-    const currentUser = auth.currentUser;
+    const [isEditing, setIsEditing] = useState(false);
+    const [userData, setUserData] = useState({
+        name: auth.currentUser?.displayName || '',
+        email: auth.currentUser?.email || '',
+        bio: "",
+        location: "",
+    });
 
-    const user = {
-        name: currentUser.displayName,
-        email: currentUser.email,
-        avatar: "https://via.placeholder.com/150",
-        bio: "Software Developer | React Enthusiast",
-        location: "San Francisco, CA",
-        stats: {
-            projects: 12,
-            followers: 248,
-            following: 186
+    const [editForm, setEditForm] = useState({
+        bio: userData.bio,
+        location: userData.location,
+    });
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const userDoc = await getDoc(doc(db, 'userInfo', auth.currentUser.uid));
+            if (userDoc.exists()) {
+                const data = userDoc.data();
+                setUserData(prev => ({
+                    ...prev,
+                    bio: data.bio || prev.bio,
+                    location: data.location || prev.location,
+                }));
+                setEditForm({
+                    bio: data.bio || userData.bio,
+                    location: data.location || userData.location,
+                });
+            }
+        };
+        
+        if (auth.currentUser) {
+            fetchUserData();
+        }
+    }, [auth.currentUser, userData.bio, userData.location]);
+
+    const handleSave = async () => {
+        try {
+            await setDoc(doc(db, 'userInfo', auth.currentUser.uid), {
+                bio: editForm.bio,
+                location: editForm.location,
+            }, { merge: true });
+            
+            setUserData(prev => ({
+                ...prev,
+                bio: editForm.bio,
+                location: editForm.location,
+            }));
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Error updating profile:', error);
         }
     };
 
     return (
         <div className="profile-container">
             <div className="profile-card">
-                <img src={user.avatar} alt="Profile" className="profile-avatar" />
-                <h1 className="profile-name">{user.name}</h1>
-                <p className="profile-email">{user.email}</p>
-                <p className="profile-bio">{user.bio}</p>
-                <p className="profile-location">
-                    <MapPin size={16} />
-                    {user.location}
-                </p>
+                <UserRound className='profile-avatar'/>
+                <h1 className="profile-name">{userData.name}</h1>
+                <p className="profile-email">{userData.email}</p>
                 
-                <button className="profile-edit-button">
-                    <Edit2 size={16} />
-                    Edit Profile
-                </button>
-
-                <div className="profile-stats">
-                    <div className="stat-item">
-                        <div className="stat-value">{user.stats.projects}</div>
-                        <div className="stat-label">Projects</div>
+                {isEditing ? (
+                    <div className="profile-edit-form">
+                        <textarea
+                            value={editForm.bio}
+                            onChange={(e) => setEditForm(prev => ({ ...prev, bio: e.target.value }))}
+                            placeholder="Enter your bio"
+                            className="profile-edit-input"
+                        />
+                        <input
+                            type="text"
+                            value={editForm.location}
+                            onChange={(e) => setEditForm(prev => ({ ...prev, location: e.target.value }))}
+                            placeholder="Enter your location"
+                            className="profile-edit-input"
+                        />
+                        <div className="profile-edit-buttons">
+                            <button onClick={handleSave} className="profile-save-button">
+                                <Save size={16} />
+                                Save
+                            </button>
+                            <button onClick={() => setIsEditing(false)} className="profile-cancel-button">
+                                <X size={16} />
+                                Cancel
+                            </button>
+                        </div>
                     </div>
-                    <div className="stat-item">
-                        <div className="stat-value">{user.stats.followers}</div>
-                        <div className="stat-label">Followers</div>
-                    </div>
-                    <div className="stat-item">
-                        <div className="stat-value">{user.stats.following}</div>
-                        <div className="stat-label">Following</div>
-                    </div>
-                </div>
+                ) : (
+                    <>
+                        <p className="profile-bio">{userData.bio}</p>
+                        <p className="profile-location">
+                            <MapPin size={16} />
+                            {userData.location}
+                        </p>
+                        <button className="profile-edit-button" onClick={() => setIsEditing(true)}>
+                            <Edit2 size={16} />
+                            Edit Profile
+                        </button>
+                    </>
+                )}
             </div>
         </div>
     );
