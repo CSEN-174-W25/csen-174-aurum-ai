@@ -8,6 +8,7 @@ import Advice from "./pages/Advice";
 import ArticleDetail from "./components/ArticleDetail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 
 // Components
 import Navbar from "./components/navbar";
@@ -28,6 +29,7 @@ const AppContent = () => {
         <Route path="/chat" element={<Chat />} />
         <Route path="/advice" element={<Advice />} />
         <Route path="/advice/:slug" element={<ArticleDetail/>} />
+        <Route path="/profile" element={<Profile/>} />
       </Routes>
     </>
   );

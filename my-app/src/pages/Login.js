@@ -14,19 +14,48 @@ const Login = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
+        setErrorMessage('');
+        
         if (!isSigningIn) {
             setIsSigningIn(true)
-            await runSignInWithEmailAndPassword(email, password)
+            try {
+                await runSignInWithEmailAndPassword(email, password);
+            } catch (error) {
+                setIsSigningIn(false);
+                // Handle specific Firebase auth errors
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        setErrorMessage('Invalid email address');
+                        break;
+                    case 'auth/user-disabled':
+                        setErrorMessage('This account has been disabled');
+                        break;
+                    case 'auth/user-not-found':
+                        setErrorMessage('No account found with this email');
+                        break;
+                    case 'auth/wrong-password':
+                        setErrorMessage('Incorrect password');
+                        break;
+                    default:
+                        setErrorMessage('Failed to sign in. Please try again.');
+                        break;
+                }
+            }
         }
     }
 
     const onGoogleSignIn = async (e) => {
         e.preventDefault()
+        setErrorMessage('');
+        
         if (!isSigningIn) {
             setIsSigningIn(true)
-            await runSignInWithGoogle().catch(err => {
-                setIsSigningIn(false)
-            })
+            try {
+                await runSignInWithGoogle();
+            } catch (error) {
+                setIsSigningIn(false);
+                setErrorMessage('Failed to sign in with Google. Please try again.');
+            }
         }
     }
 
@@ -59,8 +88,10 @@ const Login = () => {
                     </div>
 
                     {errorMessage && (
-                            <span>{errorMessage}</span>
-                        )}
+                        <div className="error-message">
+                            {errorMessage}
+                        </div>
+                    )}
 
                     <button type="submit" className="login-button" disabled={isSigningIn}>
                         {isSigningIn ? 'Signing In...' : 'Sign In'}
