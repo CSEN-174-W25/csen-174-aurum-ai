@@ -17,18 +17,50 @@ const Register = () => {
     const auth = getAuth();
 
     const onSubmit = async (e) => {
-        e.preventDefault()
-        if (!isRegistering) {
-            setIsRegistering(true)
-            await runCreateUserWithEmailAndPassword(email, password)
+        e.preventDefault();
+        setErrorMessage('');
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            setErrorMessage('Passwords do not match');
+            return;
         }
-        updateProfile(auth.currentUser, {  
-            displayName: name
-        }).then(() => {
-            console.log('User profile updated');
-        }).catch((error) => {         
-            console.log(error);
-        });
+
+        // Check password length
+        if (password.length < 6) {
+            setErrorMessage('Password should be at least 6 characters long');
+            return;
+        }
+
+        if (!isRegistering) {
+            setIsRegistering(true);
+            try {
+                await runCreateUserWithEmailAndPassword(email, password);
+                await updateProfile(auth.currentUser, {
+                    displayName: name
+                });
+            } catch (error) {
+                setIsRegistering(false);
+                // Handle specific Firebase errors
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        setErrorMessage('This email is already registered');
+                        break;
+                    case 'auth/invalid-email':
+                        setErrorMessage('Invalid email address');
+                        break;
+                    case 'auth/operation-not-allowed':
+                        setErrorMessage('Registration is currently disabled');
+                        break;
+                    case 'auth/weak-password':
+                        setErrorMessage('Password is too weak');
+                        break;
+                    default:
+                        setErrorMessage('An error occurred during registration');
+                        break;
+                }
+            }
+        }
     }
 
     return (
@@ -85,10 +117,11 @@ const Register = () => {
                         />
                     </div>
 
-
                     {errorMessage && (
-                            <span>{errorMessage}</span>
-                        )}
+                        <div className="error-message">
+                            {errorMessage}
+                        </div>
+                    )}
 
                     <button type="submit" className="login-button" disabled={isRegistering}>
                         {isRegistering ? 'Signing Up...' : 'Sign Up'}
