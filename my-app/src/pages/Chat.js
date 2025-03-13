@@ -53,7 +53,7 @@ const Chat = () => {
         };
 
         fetchUserData();
-    }, [currentUser]);
+    }, [currentUser, auth.currentUser?.uid]);
 
     if (loading) {
         return <div>Loading...</div>;
