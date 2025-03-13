@@ -11,13 +11,9 @@ import Information from './Information'; // Import the Information component
 const Dashboard = () => {
     const navigate = useNavigate()
     const { logout, currentUser } = useAuth()
-    // const [isEditing, setIsEditing] = useState(false);
-
     const auth = getAuth();
 
-    const [user] = useState({
-        lastLogin: "February 25, 2025"
-    });
+    const [lastLogin, setLastLogin] = useState("");
 
     const currentDate = new Date().toLocaleDateString('en-US', {
         weekday: 'long',
@@ -46,6 +42,14 @@ const Dashboard = () => {
 
             const { success, data } = await getUserProfile(currentUser.uid);
             if (success && data) {
+                // Format the last login timestamp
+                const lastLoginDate = data.lastLogin ? new Date(data.lastLogin.toDate()) : new Date();
+                setLastLogin(lastLoginDate.toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                }));
+
                 // Convert Firestore financial data to array format
                 setFinancialData([
                     { name: "Balance", value: data.financialData.currentBalance },
@@ -171,7 +175,7 @@ const Dashboard = () => {
                                 </div>
                                 <div className="last-login">
                                     <Clock size={16} className="icon" />
-                                    <span>Last login: {user.lastLogin}</span>
+                                    <span>Last login: {lastLogin}</span>
                                 </div>
                             </div>
                         </div>
