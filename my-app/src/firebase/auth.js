@@ -8,7 +8,7 @@ export const runSignInWithGoogle = async () => {
         const result = await signInWithPopup(auth, provider);
         
         // Check if user profile exists
-        const { success, data } = await getUserProfile(result.user.uid);
+        const { success } = await getUserProfile(result.user.uid);
         
         // If profile doesn't exist, create it
         if (!success) {

@@ -3,6 +3,13 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_restful import Api, Resource
 from app import collect_messages
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+# Initialize Firebase Admin SDK
+cred = credentials.Certificate("./credentials.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
@@ -56,6 +63,27 @@ class ChatHandler(Resource):
         rqs = request.json
         prompt = rqs.get('prompt')
         user_data = rqs.get('userData', {})
+        user_id = user_data.get('uid')
+
+        # Get real-time financial data from Firestore
+        if user_id:
+            try:
+                doc_ref = db.collection('financialData').document(user_id)
+                doc = doc_ref.get()
+                if doc.exists:
+                    fresh_data = doc.to_dict()
+                    # Update user_data with fresh financial data
+                    user_data.update({
+                        'currentBalance': fresh_data.get('financialData', {}).get('currentBalance', 0),
+                        'income': fresh_data.get('financialData', {}).get('income', 0),
+                        'expenses': fresh_data.get('financialData', {}).get('expenses', 0),
+                        'savings': fresh_data.get('financialData', {}).get('savings', 0),
+                        'investments': fresh_data.get('investments', []),
+                        'budgetCategories': fresh_data.get('budgetCategories', []),
+                        'goals': fresh_data.get('financialGoals', [])
+                    })
+            except Exception as e:
+                print(f"Error fetching fresh financial data: {e}")
 
         # Load financial context from text files
         file_contexts = load_text_from_files()
@@ -69,28 +97,21 @@ class ChatHandler(Resource):
         Today is {user_data.get('currentDate', 'Unknown')}.
 
         Their financial summary:
-        - **Monthly Income:** ${user_data.get('income', 0)}
-        - **Expenses:** ${user_data.get('expenses', 0)}
-        - **Savings:** ${user_data.get('savings', 0)}
-        - **Investment Allocation:**
-            - Stocks: {user_data.get('investments', {}).get('Stocks', 0)}%
-            - Bonds: {user_data.get('investments', {}).get('Bonds', 0)}%
-            - Real Estate: {user_data.get('investments', {}).get('Real Estate', 0)}%
-            - Cash: {user_data.get('investments', {}).get('Cash', 0)}%
+        - **Total Balance**: ${user_data.get('currentBalance', 0):,.2f}
+        - **Monthly Income:** ${user_data.get('income', 0):,.2f}
+        - **Monthly Expenses:** ${user_data.get('expenses', 0):,.2f}
+        - **Total Savings:** ${user_data.get('savings', 0):,.2f}
 
-        - **Budget Progress:**
-        """ + '\n'.join([
-            f"  - {cat['name']}: Spent ${cat['spent']} out of ${cat['budget']}" 
-            for cat in user_data.get('budgetCategories', [])
-        ]) + """
-        
-        - **Financial Goals:**
-        """ + '\n'.join([
-            f"  - {goal['name']}: ${goal['current']} saved out of ${goal['target']}"
-            for goal in user_data.get('goals', [])
-        ]) + """
+        **Investment Allocation:**
+        {chr(10).join(f"- {inv.get('type', 'Unknown')}: {inv.get('percentage', 0)}%" for inv in user_data.get('investments', []))}
 
-        Use this information to personalize your financial advice.
+        **Budget Categories:**
+        {chr(10).join(f'- {cat.get("name", "Unknown")}: ${cat.get("spent", 0):,.2f} spent of ${cat.get("budget", 0):,.2f} budget' for cat in user_data.get('budgetCategories', []))}
+
+        **Financial Goals:**
+        {chr(10).join(f'- {goal.get("name", "Unknown")}: ${goal.get("current", 0):,.2f} saved of ${goal.get("target", 0):,.2f} target' for goal in user_data.get('goals', []))}
+
+        Use this information to provide personalized financial advice.
         """
 
         system_context = f"""

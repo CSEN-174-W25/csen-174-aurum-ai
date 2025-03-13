@@ -25,4 +25,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # local files
-api/serviceAccount.json
+api/credentials.json
